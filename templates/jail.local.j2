@@ -1,0 +1,11 @@
+[DEFAULT]
+ignoreip = {{ f2bIgnoreIP | join(' ') }}
+bantime  = {{ f2bBanTime }}
+findtime  = 600
+maxretry = {{ f2bRetries }}
+banaction = firewallcmd-ipset
+backend = systemd
+
+[sshd]
+enabled = {{ f2bEnabled | string }}
+port    = {{ sshPort }}

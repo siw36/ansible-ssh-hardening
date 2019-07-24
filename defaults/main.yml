@@ -1,0 +1,14 @@
+---
+sshPort: 1337
+
+dependencies:
+  - firewalld
+  - libselinux-python
+  - policycoreutils-python
+
+# fail2ban
+f2bEnabled: true
+f2bRetries: 5
+f2bBanTime: 3600
+f2bIgnoreIP:
+  - 127.0.0.1/32

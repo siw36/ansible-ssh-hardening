@@ -1,0 +1,86 @@
+---
+- name: Ensure that required packages are installed and at latest version
+  package:
+    name: "{{ item }}"
+    state: latest
+  loop:
+    - "{{ dependencies }}"
+
+- name: Set the hostname
+  hostname:
+    name: "{{ vmHostname }}"
+
+- name: Create the users
+  user:
+    name: "{{ item.user }}"
+    shell: /bin/bash
+    create_home: true
+    groups: wheel
+    append: true
+  loop: "{{ vmAdmins }}"
+  when: vmAdmins | length > 0
+
+- name: Configure host to allow public keys
+  authorized_key:
+    user: "{{ item.user }}"
+    state: present
+    key: "{{ item.sshKey }}"
+  loop: "{{ vmAdmins }}"
+  when: vmAdmins | length > 0
+
+- name: Start and enable firewalld
+  systemd:
+    name: firewalld
+    state: started
+    enabled: true
+
+- name: Accept SSH traffic on custom port
+  firewalld:
+    port: "{{ sshPort }}/tcp"
+    permanent: yes
+    state: enabled
+
+- name: Disable SSH password authentication
+  replace:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?PasswordAuthentication.*'
+    replace: 'PasswordAuthentication no'
+
+- name: Configure custom SSH port
+  replace:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?Port [0-9]+'
+    replace: "Port {{ sshPort }}"
+
+- name: "Allow sshd to listen on tcp port {{ sshPort }}"
+  seport:
+    ports: "{{ sshPort }}"
+    proto: tcp
+    setype: ssh_port_t
+    state: present
+
+- name: Install epel followed by fail2ban
+  yum:
+    name: "{{ item }}"
+    state: latest
+  loop:
+    - https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    - fail2ban
+    - fail2ban-systemd
+
+- name: Render and apply the fail2ban config file
+  template:
+    src: templates/jail.local.j2
+    dest: /etc/fail2ban/jail.local
+    mode: 0644
+    owner: root
+    group: root
+
+- name: Start and enable services
+  systemd:
+    name: "{{ item }}"
+    state: restarted
+    enabled: true
+  loop:
+    - sshd
+    - fail2ban
