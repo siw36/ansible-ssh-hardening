@@ -14,7 +14,7 @@
     groups: wheel
     append: true
   loop: "{{ vmAdmins }}"
-  when: vmAdmins | length > 0
+  when: (vmAdmins is defined) and (vmAdmins | length > 0)
 
 - name: Configure host to allow public keys
   authorized_key:
@@ -22,7 +22,7 @@
     state: present
     key: "{{ item.sshKey }}"
   loop: "{{ vmAdmins }}"
-  when: vmAdmins | length > 0
+  when: (vmAdmins is defined) and (vmAdmins | length > 0)
 
 - name: Start and enable firewalld
   systemd:
