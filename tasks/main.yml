@@ -84,3 +84,11 @@
   loop:
     - sshd
     - fail2ban
+
+- name: Add changed host config to the dynamic inventory
+  add_host:
+    name: "{{ inventory_hostname }}"
+    groups: new_servers
+    ansible_port: "{{ sshPort }}"
+    ansible_ssh_user: root
+    ansible_host: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
