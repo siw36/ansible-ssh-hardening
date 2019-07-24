@@ -6,10 +6,6 @@
   loop:
     - "{{ dependencies }}"
 
-- name: Set the hostname
-  hostname:
-    name: "{{ vmHostname }}"
-
 - name: Create the users
   user:
     name: "{{ item.user }}"
