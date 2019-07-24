@@ -33,8 +33,9 @@
 - name: Accept SSH traffic on custom port
   firewalld:
     port: "{{ sshPort }}/tcp"
-    permanent: yes
+    permanent: true
     state: enabled
+    immediate: true
 
 - name: Disable SSH password authentication
   replace:
