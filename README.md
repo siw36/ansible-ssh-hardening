@@ -39,6 +39,7 @@ Example Playbook
 playbook.yml  
 ```yaml
 - hosts: servers
+  become: true
   roles:
      - siw36.ansible_ssh_hardening
 ```
