@@ -60,13 +60,13 @@
   - name: Get the IP addresses of the allowed network interfaces
     shell: ip -4 addr show {{ item }} | grep -oP '(?<=inet\s)\d+(\.\d+){3}'
     register: allowedIPs
-    loop: {{ allowedInterfaces }}
+    loop: "{{ allowedInterfaces }}"
 
   - name: Configure allowed IP addresses
     lineinfile:
       path: /etc/ssh/sshd_config
       line: "ListenAddress {{ item.stdout }}"
-    when: item | ipaddr
+    when: item.stdout | ipaddr
     loop: "{{ allowedIPs.results }}"
   when:
     - allowedInterfaces is defined
