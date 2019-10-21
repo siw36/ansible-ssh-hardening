@@ -32,6 +32,8 @@ Role Variables
 | f2bBanTime | Ban time in seconds | 3600 |
 | f2bIgnoreIP | List of ignored IPs/Subnets | 127.0.0.1/32 |
 | vmAdmins | List of user accounts and public SSH keys that should get access to the machine | <none - optional> |
+| allowedInterfaces | List of network interfaces on which the SSHD service should be available | <none - optional> |
+
 
 Example Playbook
 ----------------
@@ -49,6 +51,8 @@ vars/main.yml
 vmAdmins:
   - user: siw36
     sshKey: ssh-rsa xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx siw36
+allowedInterfaces:
+  - eth0
 
 ```
 

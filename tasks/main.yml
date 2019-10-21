@@ -56,6 +56,22 @@
     setype: ssh_port_t
     state: present
 
+- block:
+  - name: Get the IP addresses of the allowed network interfaces
+    shell: ip -4 addr show {{ item }} | grep -oP '(?<=inet\s)\d+(\.\d+){3}'
+    register: allowedIPs
+    loop: "{{ allowedInterfaces }}"
+
+  - name: Configure allowed IP addresses
+    lineinfile:
+      path: /etc/ssh/sshd_config
+      line: "ListenAddress {{ item.stdout }}"
+    when: item.stdout | ipaddr
+    loop: "{{ allowedIPs.results }}"
+  when:
+    - allowedInterfaces is defined
+    - allowedInterfaces | length > 0
+
 - name: Install epel followed by fail2ban
   yum:
     name: "{{ item }}"
