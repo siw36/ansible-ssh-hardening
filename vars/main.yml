@@ -2,3 +2,5 @@
 # vmAdmins:
 #   - user: siw36
 #     sshKey: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+# allowedInterfaces:
+#   - eth1
