@@ -72,12 +72,11 @@
     - allowedInterfaces is defined
     - allowedInterfaces | length > 0
 
-- name: Install epel followed by fail2ban
+- name: Install fail2ban
   yum:
     name: "{{ item }}"
     state: latest
   loop:
-    - https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
     - fail2ban
     - fail2ban-systemd
 

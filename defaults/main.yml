@@ -3,8 +3,8 @@ sshPort: 1337
 
 dependencies:
   - firewalld
-  - libselinux-python
-  - policycoreutils-python
+  - python3-libselinux
+  - python3-policycoreutils
 
 # fail2ban
 f2bEnabled: true

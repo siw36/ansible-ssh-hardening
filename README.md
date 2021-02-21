@@ -18,7 +18,8 @@ ansible-galaxy install --roles-path ./roles/ siw36.ansible_ssh_hardening
 Requirements
 ------------
 
-- RHEL based OS
+- RHEL based OS (RHEL/CentOS/Fedora)
+- Python 3 as default python interpreter
 - The user used on the remote host must have permissions to execute `sudo` commands without being prompted for password confirmation.
 
 Role Variables
